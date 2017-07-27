@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+</head>
+<body>
+<form action="test.html" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+{#    {{ form.errors }}#}
+    {{ form.uid.errors }}
+        <label for="id_subject">Email subject:</label>
+    {{ form.username }}
+    {{ form.password1 }}
+    {{ form.password2 }}
+    <input type="submit" value="确认">
+</form>
+</body>
+</html>

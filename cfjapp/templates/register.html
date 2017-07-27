@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>长丰会员登陆</title>
+    {% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static "logRegister/css/default.css"%}">
+    <link rel="stylesheet" type="text/css" href="{% static "logRegister/css/normalize.css"%}">
+    <link rel="stylesheet" type="text/css" href="{% static "logRegister/css/styles.css"%}">
+</head>
+<body>
+	<div class="htmleaf-container">
+		<header class="htmleaf-header">
+			<h1>会员注册</h1>
+			<div class="htmleaf-links">
+				<a class="htmleaf-icon icon-htmleaf-home-outline" href="index.html" title="长丰肉食" target="_blank"><span> 返回主页</span></a>
+			</div>
+		</header>
+		<div class="wrapper">
+			<div class="container">
+				<h1>Welcome</h1>
+				<form class="form" action="register.html" method="post">
+                    {% csrf_token %}
+                    {{ error_msg }}
+                    {{ form.non_field_errors }}
+                    {{ form.email }}
+                    {{ form.uid }}
+					<input type="password" placeholder="Password">
+					<input type="password" placeholder="确认密码">
+                    <div style="position: relative">
+                        {{ form.phonenum }}<span class="register_time_text">倒数计时器</span>
+                    </div>
+					<input type="text" placeholder="验证码">
+					<button type="submit" id="login-button">注册</button>
+				</form>
+			</div>
+
+			<ul class="bg-bubbles">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+
+            <a href="index.html">主页</a>
+
+
+		</div>
+	</div>
+
+	<script src="{% static "js/jquery-1.11.0.min.js"%} " type="text/javascript"></script>
+    <script src="{% static "js/jq22.js"%}"></script>
+    <script type="text/javascript">
+        function judgeUser(of) {
+            var username = $("#"+of).val()
+            if (of == "email"){
+                if (username.search(/^[\w\.+-]+@[\w\.+-]+$/) == -1){
+                    showTooltips('email_input','请输入正确的Email地址');
+                    return;
+
+                }
+            }else{
+                if(username=='' || !isMobilePhone(username)) {
+                    showTooltips('phonenum', '请输入正确的手机号码');
+                    return;
+                }
+            }
+        }
+
+        function __checkUserNameisUse() {
+            var checkusername = $("#register_uid").val()
+
+                $.ajax(
+                    {type:'POST',
+                    data:{'checkusername':checkusername},
+                    })
+        }
+    </script>
+
+</body>
+</html>
