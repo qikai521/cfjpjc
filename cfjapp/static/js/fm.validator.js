@@ -94,7 +94,7 @@ Validator = {
 		},
 		'en': {
 			textbox: {
-				required: 'This field is required',
+				required: '该字段不能为空',
 				min: 'This field must contain at least {characters} characters',
 				max: 'This field must not contain more than {characters} characters',
 				email: 'Email is not valid',
@@ -103,7 +103,7 @@ Validator = {
 				digits: 'Only numbers'
 			},
 			password: {
-				required: 'This field is required',
+				required: '该字段不能为空',
 				min: 'This field must contain at least {characters} characters',
 				max: 'This field must not contain more than {characters} characters',
 				match: 'The passwords do not match'
@@ -117,7 +117,7 @@ Validator = {
 				required: 'Choose a field from the list'
 			},
 			textarea: {
-				required: 'This field is required',
+				required: '该字段不能为空',
 				min: 'This field must contain at least {characters} characters',
 				max: 'This field must not contain more than {characters} characters',
 				url: 'Website is not valid'
