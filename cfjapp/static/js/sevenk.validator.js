@@ -158,9 +158,10 @@ Validator = {
 	}, 
 	showError: function (element, text) {
 		if (!$(element).hasClass(Validator.elementErrorClass)) {
+			$(element).css("border-color","red");
 			var error = document.createElement('div');
-			$(error).addClass('validator-error').html(text);
-			
+
+			$(error).addClass('validator-error_'+$(element).attr("id")).html(text);
 			if ($(element).attr('data-error-position') == undefined) {
 				var errorPosition = 'before';
 				if ($(this).is('input') && $(this).attr('type') == 'checkbox') {
@@ -188,6 +189,18 @@ Validator = {
 			}
 		}
 	},
+	removeError:function (element) {
+		if ($(element).hasClass(Validator.elementErrorClass)) {
+			$(element).css("border-color","green");
+
+			var error_classname = 'validator-error_'+$(element).attr("id");
+			$("."+error_classname).remove();
+
+			element.removeClass(Validator.elementErrorClass);
+		}
+		$(element).css("border-color","green");
+
+    },
 	validate: function (form) {
 		var hasErrors = false;
 		var firstErrorElement = null;
