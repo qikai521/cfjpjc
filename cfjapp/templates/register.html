@@ -54,9 +54,9 @@
 	</div>
 
     <script src="{% static "js/jquery-1.11.0.min.js"%} " type="text/javascript"></script>
-    <script src="{% static "js/fm.validator.js"%}"></script>
+    <script src="{% static "js/sevenk.validator.js" %}"></script>
     <script >
-        Validator.language = 'en';
+        Validator.language = 'cn';
         $('form.validator').each(function () {
 		    $(this).submit(function () {
 			    return Validator.validate(this);

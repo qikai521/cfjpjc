@@ -128,7 +128,7 @@ Validator = {
 				required: '该字段不能为空',
 				min: '该字段不能小于{characters}个字段',
 				max: '该字段不能超过{characters}个字段',
-				email: 'Email格式不负荷而',
+				email: 'Email格式不符合',
 				url: 'url格式不符合',
 				number: 'Only numbers',
 				digits: 'Only numbers',
@@ -388,8 +388,20 @@ Validator = {
 			}
 		});
 	},
+	removeErrorMsg:function () {
+		$('.validator-error').each(function () {
+			$(this).remove();
+		});
+		$('.error').each(function () {
+			$(this).removeClass('error');
+		});
+		$('.useblur').each(function () {
+			$(this).removeClass('error');
+		});
+    },
+
 	checkOnBlur:function (input) {
-		alert("到这里没有？？");
+
 		if ($(input).attr('data-required') != undefined && $(input).val() == '' && $(input).attr('data-required-if') == undefined) {
 			Validator.showError(input, Validator.languages[Validator.language].textbox.required);
 		}
@@ -449,5 +461,6 @@ Validator = {
 
 			}
 		}
+		setTimeout("Validator.removeErrorMsg()",3000);
 	}
 };
