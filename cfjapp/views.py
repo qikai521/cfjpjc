@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate,login,logout
 from django.shortcuts import render,redirect
 from django.template import RequestContext
-from .forms import LoginForm,RegisterForm,TestForm
+from .forms import LoginForm,RegisterForm
 from .models import ProduceModel
 
 
@@ -79,7 +79,7 @@ def cf_register(req):
         else:
             print(form.errors)
 
-    return render(req,'register.html',{"error_msg":"error"})
+    return render(req,'register.html',{"error_msg":"error","form":form})
 
 def cf_test(req):
     error_msg = None
