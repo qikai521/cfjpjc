@@ -75,7 +75,6 @@
                     return;
                     }
                 }
-
                 Validator.removeError(textView);
             }else if (type == 'email'){
                 var textVal = $('#inputid_email').val();
@@ -101,6 +100,24 @@
 								return
 							}
                 Validator.removeError(textView);
+            }
+
+            if (type == 'phone' || type == 'uname'){
+                var textVal = $('#inputid_'+type).val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'yanzheng' ,
+                    data: {
+                        "type":type,
+                        "text":textVal
+                    } ,
+                    success: function () {
+                        Validator.removeError($('#inputid_'+type));
+                    },
+                    error:function (data) {
+                        Validator.showError($('#inputid_'+type), data.msg);
+                    }
+                });
             }
         }
     </script>

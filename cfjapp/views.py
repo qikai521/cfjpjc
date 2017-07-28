@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate,login,logout
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.template import RequestContext
 from .forms import LoginForm,RegisterForm
-from .models import ProduceModel
+from .models import ProduceModel,NewUser
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -102,3 +103,19 @@ def cf_test(req):
             print(form._errors)
 
     return  render(req,'test.html',{'form':form,'error_msg':error_msg})
+
+def register_yanzheng(req):
+    type = req.POST.get('type')
+    yz_text = req.POST.get("text")
+    if type == 'phone':
+        #验证手机号
+        try:
+            phone = NewUser.objects.filter(phonenum=yz_text)
+        except ObjectDoesNotExist:
+            data = {"flag":0}
+            return HttpResponse({"data":data})
+        else:
+            data = {"flag": 1,"msg":"该手机号码已被注册"}
+            return HttpResponse({"data": data})
+
+
