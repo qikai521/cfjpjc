@@ -4,7 +4,8 @@ from django.template import RequestContext
 from .forms import LoginForm,RegisterForm
 from .models import ProduceModel,NewUser
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -73,7 +74,7 @@ def cf_register(req):
     if req.method == 'POST':
         form = RegisterForm(req.POST)
         if form.is_valid():
-            username = form.cleaned_data['uid']
+            username = form.cleaned_data['uname']
             email = form.cleaned_data['email']
             print("success")
             return render(req, 'register.html', {'form': form})
@@ -96,26 +97,46 @@ def cf_test(req):
             passsword = form.cleaned_data['password1']
             # user = User.objects.create_data(username, email, password)
             # user.save()
-            return render(req, 'test.html.html')
+            return render(req, 'test.html')
         else:
             form.clean_username()
             print("not_valid")
             print(form._errors)
 
     return  render(req,'test.html',{'form':form,'error_msg':error_msg})
-
+@csrf_exempt
 def register_yanzheng(req):
-    type = req.POST.get('type')
-    yz_text = req.POST.get("text")
-    if type == 'phone':
-        #验证手机号
-        try:
-            phone = NewUser.objects.filter(phonenum=yz_text)
-        except ObjectDoesNotExist:
-            data = {"flag":0}
-            return HttpResponse({"data":data})
+    if req.method == "GET":
+        print("get")
+        form = RegisterForm()
+        return render(req, 'register.html', {'form': form})
+    else:
+        type = req.POST.get('type')
+        yz_text = req.POST.get("text")
+        print(type, yz_text)
+        form = RegisterForm()
+        if type == 'phone':
+            # 验证手机号
+            try:
+                phone = NewUser.objects.filter(phonenum=yz_text)
+            except ObjectDoesNotExist:
+                data = {"flag": 1,"msg":"可以使用"}
+                return JsonResponse({"data": data})
+            else:
+                data = {"flag": 0, "msg": "该手机号码已被注册"}
+                return JsonResponse({"data": data})
+        elif type == 'uname':
+            try:
+                uname = NewUser.objects.get(username=yz_text)
+            except ObjectDoesNotExist:
+                data = {"flag": 1,'msg':"可以使用"}
+                return JsonResponse({"data": data})
+            else:
+                data = {"flag": 0, "msg": "该账号已被注册"}
+                return JsonResponse({"data": data})
         else:
-            data = {"flag": 1,"msg":"该手机号码已被注册"}
-            return HttpResponse({"data": data})
+            print('???')
+        # return render(req, 'register.html', {"error_msg": "error", "form": form})
+
 
 
