@@ -104,26 +104,26 @@
 
             if (type == 'phone' || type == 'uname'){
                 var textVal = $('#inputid_'+type).val();
-            <!--    $.ajax({
-                    type: 'POST',
-                    url: 'yanzheng' ,
-                    data: {
+                $.getJSON(
+                    'yanzheng',
+                    {
                         "type":type,
                         "text":textVal
+                    },
+                    function (data) {
+                        var isGood = data.callback.flag;
+                        var msg = data.callback.msg;
+                        if (!isGood){
+                            Validator.showError(textView,msg);
+                            hasErrors = true;
+                            return;
+                        }else {
+                            Validator.removeError(textView);
+                        }
                     }
-                }).success(function (data) {
-                    alert($(data));
-                }).fail(function (data) {
-                })
-                alert("Sssssss")
-                $.getJSON("yanzheng",{"type":type,"text":textVal},function (data) {
-                    alert("???");
-                    for (var i = 0; i < data.length;i++){
-                        alert("???");
-                        alert(data.msg);
-                    }
-                });
-            -->
+                );
+
+
             }
         }
     </script>
