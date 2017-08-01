@@ -22,7 +22,7 @@
 		<div class="wrapper">
 			<div class="container">
 				<h1>Welcome</h1>
-				<form class="validator" action="register.html" method="post">
+				<form class="validator" action="yanzheng" method="post">
                     {% csrf_token %}
                     {{ form.uname }}
                     {{ form.email }}
@@ -104,46 +104,29 @@
 
             if (type == 'phone' || type == 'uname'){
                 var textVal = $('#inputid_'+type).val();
-                $.ajax({
+            <!--    $.ajax({
                     type: 'POST',
                     url: 'yanzheng' ,
                     data: {
                         "type":type,
                         "text":textVal
-                    } ,
-                    success: function () {
-                        Validator.removeError($('#inputid_'+type));
-                    },
-                    error:function (data) {
-                        Validator.showError($('#inputid_'+type), data.msg);
+                    }
+                }).success(function (data) {
+                    alert($(data));
+                }).fail(function (data) {
+                })
+                alert("Sssssss")
+                $.getJSON("yanzheng",{"type":type,"text":textVal},function (data) {
+                    alert("???");
+                    for (var i = 0; i < data.length;i++){
+                        alert("???");
+                        alert(data.msg);
                     }
                 });
+            -->
             }
         }
     </script>
-
-
-    <!--
-     <script >
-
-        Validator.language = 'cn';
-        $('form.validator').each(function () {
-		    $(this).submit(function () {
-			    return Validator.validate(this);
-		    });
-	    });
-
-        $(".useblur").each(
-		    function () {
-			    $(this).blur(function () {
-                    return Validator.checkOnBlur(this);
-			    });
-		    }
-	    );
-    </script>
-
-    -->
-
 
 </body>
 </html>
