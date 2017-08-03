@@ -22,7 +22,7 @@
 		<div class="wrapper">
 			<div class="container">
 				<h1>Welcome</h1>
-				<form class="validator" action="yanzheng" method="post">
+				<form class="validator" id ='register_form' action="/submit" method="post">
                     {% csrf_token %}
                     {{ form.uname }}
                     {{ form.email }}
@@ -33,7 +33,7 @@
                     </div>
                     {{ form.code }}
 
-					<button type="submit" id="login-button">注册</button>
+					<button type="submit" id="login-button" >注册</button>
 				</form>
 			</div>
 
@@ -50,29 +50,30 @@
 				<li></li>
 			</ul>
 
-		</div>
+		</div>0
 	</div>
 
     <script src="{% static "js/jquery-1.11.0.min.js"%} " type="text/javascript"></script>
     <script src="{% static "js/sevenk.validator.js" %}"></script>
 
     <script>
+
         function checkWithType(type) {
             if(type == 'uname' ||type == 'pwd' ||type == 'repwd' ){
                 var textVal = $('#inputid_'+type).val();
                 var textView = $('#inputid_'+type);
                 if (textVal.length < parseFloat(textView.attr('data-min'))){
 					Validator.showError(textView, Validator.languages[Validator.language].textbox.min.replace('{characters}', $(textView).attr('data-min')));
-                    return;
+                    return false;
                 }
                 if (textVal.length > parseFloat(textView.attr('data-max'))){
 					Validator.showError(textView, Validator.languages[Validator.language].textbox.max.replace('{characters}', $(textView).attr('data-max')));
-                    return;
+                    return false;
                 }
                 if (type == 'repwd'){
                     if (textVal != $('#inputid_pwd').val()){
                         Validator.showError(textView, Validator.languages[Validator.language].password.match);
-                    return;
+                    return false;
                     }
                 }
                 Validator.removeError(textView);
@@ -84,7 +85,7 @@
                 if (!regex.test(textVal)) {
 								Validator.showError(textView, Validator.languages[Validator.language].textbox.email);
 								hasErrors = true;
-								return
+								return false;
 							}
                 Validator.removeError(textView);
 
@@ -97,7 +98,7 @@
                 if (!regex.test(textVal)) {
 								Validator.showError(textView, Validator.languages[Validator.language].textbox.phone);
 								hasErrors = true;
-								return
+								return false;
 							}
                 Validator.removeError(textView);
             }
@@ -116,16 +117,60 @@
                         if (!isGood){
                             Validator.showError(textView,msg);
                             hasErrors = true;
-                            return;
+                            return false;
                         }else {
                             Validator.removeError(textView);
                         }
                     }
                 );
-
-
             }
-        }
+            return true;
+        };
+
+        $(document).ready(function(){
+            $("form").submit(function () {
+                var isGood = true;
+                var username = $('inputid_uname').val();
+                var email = $('inputid_email').val();
+                var pwd = $('inputid_pwd').val();
+                var repwd = $('inputid_repwd').val();
+                var phone = $('inputid_phone').val();
+                var code = $('inputid_code').val();
+                var klist = ["uname","email","pwd","repwd","phone","code"];
+                var vList = [username,email,pwd,repwd,phone,code];
+                for (var i = 0 ;i<klist.length;i++) {
+                    isGood = checkWithType(klist[i]);
+                    if (!isGood) {
+                        return false;
+                    }
+                }
+                if (isGood){
+                    $.ajax({
+                        url:'/submit/',
+                        type:'post',
+                        data:{
+                            "username":username,
+            `                "email":email,
+                            "pwd":pwd,
+                            "phone":phone,
+                            "code":code
+                        },
+                        success:function (backData,text,jsq) {
+                            alert('success');
+                            alert(backData.bData);
+                            return false;
+                        },
+                        error:function (data) {
+                            alert("error");
+                        }
+                    });
+                }else {
+                    alert("errorboom");
+                }
+                return false;
+            })
+        });
+
     </script>
 
 </body>

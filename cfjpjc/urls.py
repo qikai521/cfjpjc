@@ -1,7 +1,7 @@
 
 from django.conf.urls import url,include
 from django.contrib import admin
-from cfjapp.views import index,aboutus,ourStory,menu,order,location,shop,contact,shop_step_one,shop_step_three,shop_step_two,cf_login,cf_logout,cf_register,cf_test,register_yanzheng
+from cfjapp.views import index,aboutus,ourStory,menu,order,location,shop,contact,shop_step_one,shop_step_three,shop_step_two,cf_login,cf_logout,cf_register,register_yanzheng,register_submit
 
 
 urlpatterns = [
@@ -20,6 +20,6 @@ urlpatterns = [
     url(r'^login',cf_login),
     url(r'^logout', cf_logout),
     url(r'^register', cf_register),
-    url(r'^test',cf_test),
     url(r'^yanzheng',register_yanzheng),
+    url(r'^submit',register_submit),
 ]

@@ -6,13 +6,12 @@ from .models import ProduceModel,NewUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-
+import re
 
 # Create your views here.
 
 def index(req):
-    print('index')
-    print(req)
+
     homeShowList = ProduceModel.objects.order_by('sortid')
     loginForms = LoginForm()
     reqCtx = RequestContext(req,{})
@@ -56,14 +55,12 @@ def cf_login(req):
                 print("出错了")
                 return render(req, 'login.html', {'form': form, 'error': "用户名或者密码错误"})
         else:
-            print(form.errors)
-            print("not valid")
+
             return render(req, 'login.html', {'form': form})
     return render(req,'login.html',{})
 def cf_logout(req):
     url = req.POST.get('','/index')
     logout(req)
-    print('logout')
     return redirect(url)
 
 def cf_register(req):
@@ -76,20 +73,15 @@ def cf_register(req):
         if form.is_valid():
             username = form.cleaned_data['uname']
             email = form.cleaned_data['email']
-            print("success")
             return render(req, 'register.html', {'form': form})
         else:
-            print(form.errors)
-
+            pass
     return render(req,'register.html',{"error_msg":"error","form":form})
 
-def cf_test(req):
-    return JsonResponse({"name":"qikai","age":18})
 @csrf_exempt
 def register_yanzheng(req):
     type = req.GET.get('type')
     yz_text = req.GET.get("text")
-    print(type, yz_text)
     form = RegisterForm()
     if type == 'phone':
         # 验证手机号
@@ -113,6 +105,61 @@ def register_yanzheng(req):
     else:
         print('???')
         # return render(req, 'register.html', {"error_msg": "error", "form": form})
+def register_submit(req):
+    print('submit')
+    error_msg = None
+    if req.method == 'GET':
+        form = RegisterForm()
+        return render(req, 'register.html', {'form': form})
+    if req.method == 'POST':
+        form = RegisterForm(req.POST)
+        username = 'sss'
+        # username = form.cleaned_data['uname']
+        email = req.POST['email']
+        pwd = req.POST['pwd']
+        repwd = req.POST['repwd']
+        code = req.POST['code']
+        phone = req.POST['phone']
+        regist_usr = NewUser()
+        regist_usr.username = username
+        regist_usr.email = email
+        regist_usr.password = pwd
+        regist_usr.phonenum = phone
+        regist_usr.save()
+        bData = {"flag":1,"msg":"success"}
+        return JsonResponse({"bData":bData})
 
 
 
+
+def yanzhengWithType(type,text,repwd):
+    if type == 'uname':
+        if len(text) <5 or len(text) > 12:
+            return (False,'请输入5-12位用户名')
+        user = NewUser.objects.get(username=text)
+        if(user):
+            return (False,'该用户已经存在')
+
+    if type == 'email':
+        regexStr = r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?"
+        result = re.match(regexStr,text)
+        if result == False:
+            return (False,"邮箱地址不正确")
+
+    if type == 'pwd':
+        if len(text) <6 or len(text) > 18:
+            return (False,'请输入6-18位密码')
+        elif (text != repwd):
+            return (False,"两次密码不同")
+
+    if type == "phone":
+        regexStr = r"1\d{10}"
+        result = re.match(regexStr, text)
+        if result == False:
+            return (False, "手机号码格式不正确")
+
+        user = NewUser.objects.get(phonenum=text)
+        if(user):
+            return (False,"该手机号码已存在")
+
+    return (True,"Success")
