@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static "logRegister/css/default.css"%}">
     <link rel="stylesheet" type="text/css" href="{% static "logRegister/css/normalize.css"%}">
     <link rel="stylesheet" type="text/css" href="{% static "logRegister/css/styles.css"%}">
+    <!--SDSDSD-->
 
 </head>
 <body>
@@ -22,7 +23,7 @@
 		<div class="wrapper">
 			<div class="container">
 				<h1>Welcome</h1>
-				<form class="validator" id ='register_form' action="/submit" method="post">
+				<form class="validator" id ='register_form' action="index.html" method="post">
                     {% csrf_token %}
                     {{ form.uname }}
                     {{ form.email }}
@@ -53,7 +54,7 @@
 		</div>0
 	</div>
 
-    <script src="{% static "js/jquery-1.11.0.min.js"%} " type="text/javascript"></script>
+    <script src="{% static "js/jquery-1.11.1.min.js"%} " type="text/javascript"></script>
     <script src="{% static "js/sevenk.validator.js" %}"></script>
 
     <script>
@@ -125,53 +126,48 @@
                 );
             }
             return true;
-        };
+        }
 
         $(document).ready(function(){
             $("form").submit(function () {
                 var isGood = true;
-                var username = $('inputid_uname').val();
-                var email = $('inputid_email').val();
-                var pwd = $('inputid_pwd').val();
-                var repwd = $('inputid_repwd').val();
-                var phone = $('inputid_phone').val();
-                var code = $('inputid_code').val();
-                var klist = ["uname","email","pwd","repwd","phone","code"];
-                var vList = [username,email,pwd,repwd,phone,code];
-                for (var i = 0 ;i<klist.length;i++) {
+                var username = $('#inputid_uname').val();
+                var email = $('#inputid_email').val();
+                var pwd = $('#inputid_pwd').val();
+                var repwd = $('#inputid_repwd').val();
+                var phone = $('#inputid_phone').val();
+                var code = $('#inputid_code').val();
+                var klist = ["uname", "email", "pwd", "repwd", "phone", "code"];
+                var vList = [username, email, pwd, repwd, phone, code];
+                for (var i = 0; i < klist.length; i++) {
                     isGood = checkWithType(klist[i]);
                     if (!isGood) {
                         return false;
                     }
                 }
+
                 if (isGood){
                     $.ajax({
-                        url:'/submit/',
+                        url:'submit',
                         type:'post',
                         data:{
                             "username":username,
-            `                "email":email,
                             "pwd":pwd,
                             "phone":phone,
-                            "code":code
+                            "email":email
                         },
-                        success:function (backData,text,jsq) {
-                            alert('success');
-                            alert(backData.bData);
-                            return false;
-                        },
-                        error:function (data) {
-                            alert("error");
-                        }
-                    });
-                }else {
-                    alert("errorboom");
-                }
-                return false;
-            })
-        });
-
-    </script>
+                        success:function (bdata) {
+                            if(bdata.callback.flag == 1){
+                                $('form').fadeOut(500);
+                                $('.wrapper').addClass('form-success');
+                                setTimeout(window.location.href("index.html"),500);
+                            }
+                        }}
+                    )}
+                    return false;
+            });
+        })
+</script>
 
 </body>
 </html>

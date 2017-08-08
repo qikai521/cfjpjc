@@ -13,6 +13,7 @@ import re
 def index(req):
 
     homeShowList = ProduceModel.objects.order_by('sortid')
+    homeShowList = ProduceModel.objects.order_by('sortid')
     loginForms = LoginForm()
     reqCtx = RequestContext(req,{})
     return render(req,'index.html',{'homeShowList':homeShowList,'loginForms':loginForms})
@@ -78,7 +79,6 @@ def cf_register(req):
             pass
     return render(req,'register.html',{"error_msg":"error","form":form})
 
-@csrf_exempt
 def register_yanzheng(req):
     type = req.GET.get('type')
     yz_text = req.GET.get("text")
@@ -105,31 +105,21 @@ def register_yanzheng(req):
     else:
         print('???')
         # return render(req, 'register.html', {"error_msg": "error", "form": form})
+
+@csrf_exempt
 def register_submit(req):
-    print('submit')
-    error_msg = None
-    if req.method == 'GET':
-        form = RegisterForm()
-        return render(req, 'register.html', {'form': form})
-    if req.method == 'POST':
-        form = RegisterForm(req.POST)
-        username = 'sss'
-        # username = form.cleaned_data['uname']
-        email = req.POST['email']
-        pwd = req.POST['pwd']
-        repwd = req.POST['repwd']
-        code = req.POST['code']
-        phone = req.POST['phone']
-        regist_usr = NewUser()
-        regist_usr.username = username
-        regist_usr.email = email
-        regist_usr.password = pwd
-        regist_usr.phonenum = phone
-        regist_usr.save()
-        bData = {"flag":1,"msg":"success"}
-        return JsonResponse({"bData":bData})
-
-
+    username = req.POST['username']
+    pwd = req.POST['pwd']
+    emial = req.POST['email']
+    phone = req.POST['phone']
+    c_user = NewUser()
+    c_user.username = username
+    c_user.phonenum = phone
+    c_user.email = emial
+    c_user.password = pwd
+    c_user.save()
+    bData = {"flag": 1, "msg": "success"}
+    return JsonResponse({"callback":bData})
 
 
 def yanzhengWithType(type,text,repwd):

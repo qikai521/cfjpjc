@@ -126,7 +126,9 @@
                                 <a class="bsm_effect_slide_left bsm_amatic_font bsm_font_size_42 bsm_bold bsm_align_center bsm_1199_font_size_42 bsm_991_font_size_36" href="">购买</a>
                             </div>
                             <div class="bsm_showproduce ">
-                                <img class = "showproduce" src="{{ foo.imgURL }}">
+{#                                <body class = "showproduce" style="background-repeat: no-repeat;background-image: url({{ foo.imgURL }}">#}
+{#                                </body>#}
+                                <img class = "showproduce" style="background-repeat: no-repeat;background-image: url({{ foo.imgURL }});" src="{{ foo.imgURL }}">
                             </div>
                             <div class="bsm_section_1_content_price bsm_align_center">
                                 <h1 class="bsm_amatic_font bsm_font_size_36 bsm_bold bsm_uppercase">Price:</h1>
@@ -911,6 +913,8 @@
         <script src={% static 'js/staller.js' %}></script>
         <script src={% static 'js/range_price.js' %}></script>
         <script src={% static 'js/custom.js' %}></script>
+        <script src={% static 'js/jquery-1.11.1.min.js' %}></script>
+
 
         <!---<script src="http://ditu.google.cn/maps/api/js?key=AIzaSyBqBPws5a6AripWzjun2W5klv21yJdYS_E&callback=initMap"></script>--->
     </body>
